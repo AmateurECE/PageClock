@@ -7,7 +7,7 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/20/2019
+// LAST EDITED:     05/21/2019
 ////
 
 function startTime() {
@@ -56,10 +56,10 @@ let updateButton = document.getElementById('update');
 updateButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
-        var textInput = document.getElementById('textarea').innerHTML;
+        var textInput = document.getElementById('textarea').value;
         pageClock.setMatches(textInput.split('\n'));
-        // TODO: Trigger update when form input
-        // TODO: Start incrementing page's counter, if not already.
+        pageClock.update(null);
+        startTime();
     });
 });
 

@@ -7,8 +7,21 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/20/2019
+// LAST EDITED:     05/21/2019
 ////
+
+///////////////////////////////////////////////////////////////////////////////
+// Class: Debugger
+////
+
+function Debugger(debugState) {
+    this.debugState = false || debugState;
+    this.debug = function(string) {
+        if (debugState) {
+            console.log(string);
+        }
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class: Timer
@@ -19,7 +32,7 @@ function Timer() {
     this.running = false;
     this.startTime = new Date(0);
     this.time = new Date(0);
-    this.debug = false;
+    this.debug = new Debugger();
 
     this.getDebug = function() { return this.debug; }
     this.setDebug = function(debug) { this.debug = debug; }
@@ -52,22 +65,19 @@ function Timer() {
 
     // Start the timer (save the current date as the start time)
     this.start = function() {
+        var debug = this.debug.debug;
         this.startTime = new Date();
-        if (this.debug) {
-            console.log('Starting timer');
-        }
+        debug('Starting timer');
         this.running = true;
     }
 
     // Stop the timer (increment this.time by the time that's elapsed)
     this.stop = function() {
+        var debug = this.debug.debug;
         // Stop the timer and update the time
         var diffTime = new Date(new Date() - this.startTime);
         this.time.setTime(this.time.getTime() + diffTime.getTime());
-        if (this.debug) {
-            console.log('Stopping timer: ' + this.time.getSeconds()
-                        + ' seconds');
-        }
+        debug('Stopping timer: ' + this.time.getSeconds() + ' seconds');
         this.running = false;
     }
 }
@@ -80,7 +90,7 @@ function PageClock(matches) {
     // Instance attributes
     this.matches = matches;
     this.url = null;
-    this.debug = false;
+    this.debug = new Debugger();
     this.timer = new Timer();
 
     // TODO: this.readTime()
@@ -106,9 +116,15 @@ function PageClock(matches) {
     // Update the timer when a new page loads
     this.update = function(url) {
         var self = this;
-        self.url = url; // Update the URL
-        if (self.debug) {
-            console.log('New URL: ' + url);
+        var debug = self.debug.debug;
+        debug('Updating...');
+
+        // The popup calls update when a change has been made to this.matches,
+        // but the popup doesn't know the current URL. So, it passes null, and
+        // we simply carry on as if it's changed.
+        if (null !== url) {
+            self.url = url; // Update the URL
+            debug('New URL: ' + url);
         }
 
         // Stop timer, if it is running
@@ -117,15 +133,15 @@ function PageClock(matches) {
         }
 
         // Determine if we also need to start the timer
+        debug('Testing matches against url: ' + self.url);
         self.matches.forEach(function(element) {
+            debug('Testing: ' + element);
             if (self.url.indexOf(element) !== -1) {
                 // Start the timer
-                if (self.debug) {
-                    console.log('Matches: ' + element);
-                }
+                debug('Matches: ' + element);
                 self.timer.start();
             }
-        })
+        });
     }
 }
 
@@ -138,7 +154,7 @@ var thePageClock = null;
 chrome.runtime.onInstalled.addListener(function() {
     thePageClock = new PageClock(['developer.chrome.com']);
     // TODO: Unset debug
-    thePageClock.setDebug(true);
+    thePageClock.setDebug(new Debugger(true));
 
     // Welcome message
     console.log('Installed PageClock v'

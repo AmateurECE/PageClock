@@ -68,6 +68,7 @@ resetButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
         pageClock.resetTimer();
+        printTime(pageClock.getTime());
     });
 });
 

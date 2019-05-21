@@ -1,0 +1,7 @@
+./background.js: this.readTime() | id:2201382d3f12910ce8d42cff48fb8e7f9c262385
+./background.js: Update getTime | id:523f562002397cc2a14a87d2a90c34b0eb116fa2
+./popup.html: Page styles --> | id:6ba1c87db08bc7e69eed1795d3522069fef4402b
+./background.js: Unset debug | id:91d2c5957aa1dd2e4bcdb628c1a4df8249fea3be
+./background.js: Run if this window is no longer focused? | id:ad5bf4e59683a279124a4d880d9c8e6a36fcd168
+./background.js: Check that tabs has exactly one entry. | id:c7807d31c1c6fc934368423a09e14f306ef172fa
+./background.js: Run when browser is closed? | id:e1ec9de0af0a31f19408feea490e38621d8917f5

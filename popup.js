@@ -7,7 +7,7 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/21/2019
+// LAST EDITED:     05/22/2019
 ////
 
 function startTime() {
@@ -71,7 +71,16 @@ updateButton.addEventListener('click', function(element) {
         chrome.tabs.query({'active': true}, (tabs) =>{
             var pageClock = backPage.thePageClock;
             var textInput = document.getElementById('textarea').value;
-            pageClock.setMatches(textInput.split('\n'));
+
+            // If textInput is empty, .split('\n') creates the array [""], when
+            // really we want [].
+            if (textInput == '') {
+                pageClock.setMatches([]);
+            } else {
+                pageClock.setMatches(textInput.split('\n'));                
+            }
+
+            // TODO: Also make `.update()' to take an array in updateButton.
             pageClock.update(tabs[0].url);
             // TODO: Timer does not stop running on updateButton listener
             // If the timer is currently running, and if after the updateButton

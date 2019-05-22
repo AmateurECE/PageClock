@@ -7,25 +7,65 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/21/2019
+// LAST EDITED:     05/22/2019
 ////
 
 // TODO: Fix storage of time
-// TODO: Fix storage of matches
 // TODO: Fix timer snapshot
 // TODO: Popup style sheet
+
+///////////////////////////////////////////////////////////////////////////////
+// Class: PageClockSerializer
+////
+
+function PageClockSerializer() {
+    this.matchName = 'PageClock.matches';
+
+    // Read the matches from Chrome user storage.
+    this.readMatches = function(pageClock) {
+        var dict = {};
+        dict[this.matchName] = [];
+        chrome.storage.sync.get(dict, (matches) => {
+            var self = this;
+            // TODO: Remove this
+            console.log(matches);
+            if (typeof chrome.runtime.lastError !== 'undefined') {
+                console.error(chrome.runtime.lastError);
+                console.warn("Using empty array for `matches'");
+                pageClock.matches = new Array();
+            } else {
+                pageClock.matches = matches[self.matchName];
+            }
+        });
+    }
+
+    // Write the current matches into Chrome user storage.
+    this.writeMatches = function(pageClock) {
+        var dict = {};
+        dict[this.matchName] = pageClock.matches;
+        chrome.storage.sync.set(dict, () => {
+            if (typeof chrome.runtime.lastError !== 'undefined') {
+                console.error(chrome.runtime.lastError);
+            }
+        });
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class: PageClock
 ///
 
-function PageClock(matches) {
+function PageClock(pageClockSerializer) {
     // Instance attributes
-    this.matches = matches;
+    this.matches = null;
     this.url = null;
-    this.debug = new Debugger();
+    this.debug = new Debugger(true);
     this.timer = new Timer();
     this.lastReset = new Date();
+
+    // Read in matches info.
+    this.pageClockSerializer = pageClockSerializer;
+    this.pageClockSerializer.readMatches(this);
 
     // Getters and Setters
     this.getUrl = function()    { return this.url; }
@@ -38,7 +78,10 @@ function PageClock(matches) {
     }
 
     this.getMatches = function()        { return this.matches; }
-    this.setMatches = function(matches) { this.matches = matches; }
+    this.setMatches = function(matches) {
+        this.matches = matches;
+        this.pageClockSerializer.writeMatches(this);
+    }
 
     this.getLastReset = function() { return this.lastReset; }
 
@@ -80,11 +123,13 @@ function PageClock(matches) {
 ///
 
 // Called when the background script is installed. Initializes thePageClock.
+var thePageClockSerializer = null;
 var thePageClock = null;
 chrome.runtime.onInstalled.addListener(function() {
-    thePageClock = new PageClock(['developer.chrome.com']);
+    thePageClockSerializer = new PageClockSerializer();
+    thePageClock = new PageClock(thePageClockSerializer);
     // TODO: Unset debug
-    thePageClock.setDebug(new Debugger(true));
+    // thePageClock.setDebug(null);
 
     // Welcome message
     console.log('Installed PageClock v'
@@ -97,6 +142,10 @@ chrome.runtime.onInstalled.addListener(function() {
 function updatedListener(tabId, changeInfo, tab) {
     chrome.tabs.query({"active": true},
                       function(tabs) {
+                          // TODO: pass url as array to .update()
+                          // `tabs' has more than one entry when there is more
+                          // than one window. Since this is pretty common, we
+                          // should be sure to account for it.
                           if (tabs.length != 1) {
                               console.warn("`tabs' has more than one entry.");
                           }

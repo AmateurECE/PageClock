@@ -7,7 +7,7 @@
 //
 // CREATED:         05/21/2019
 //
-// LAST EDITED:     05/21/2019
+// LAST EDITED:     05/22/2019
 ////
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ function Timer() {
     this.running = false;
     this.startTime = new Date(0);
     this.time = new Date(0);
-    this.debug = new Debugger();
+    this.debug = new Debugger(true);
 
     this.getDebug = function() { return this.debug; }
     this.setDebug = function(debug) { this.debug = debug; }

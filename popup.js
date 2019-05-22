@@ -13,11 +13,11 @@
 function startTime() {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
-        var time = pageClock.getTime();
+        var time = pageClock.getTimer().getTime();
         printTime(time);
         // Update the time every second, so it looks like we're continuously
         // counting
-        if (pageClock.timerIsRunning()) {
+        if (pageClock.getTimer().isRunning()) {
             setInterval(() => {
                 time = new Date(time.getTime() + 1000)
                 printTime(time);
@@ -51,7 +51,7 @@ function printLastReset() {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
         document.getElementById('lastReset').innerHTML =
-            pageClock.getLastReset();
+            pageClock.getTimer().getLastReset();
     });
 }
 
@@ -95,8 +95,8 @@ let resetButton = document.getElementById('reset');
 resetButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
-        pageClock.resetTimer();
-        printTime(pageClock.getTime());
+        pageClock.getTimer().reset();
+        printTime(pageClock.getTimer().getTime());
         printLastReset();
         // TODO: Does not reset when timer is running
         // If the timer is running when the reset button is clicked, the timer

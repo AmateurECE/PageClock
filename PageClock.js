@@ -10,7 +10,6 @@
 // LAST EDITED:     05/22/2019
 ////
 
-// TODO: Fix timer snapshot
 // TODO: Popup style sheet
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,8 +25,6 @@ function PageClockSerializer() {
         dict[this.matchName] = [];
         chrome.storage.sync.get(dict, (matches) => {
             var self = this;
-            // TODO: Remove this
-            console.log(matches);
             if (typeof chrome.runtime.lastError !== 'undefined') {
                 console.error(chrome.runtime.lastError);
                 console.warn("Using empty array for `matches'");
@@ -64,8 +61,6 @@ function PageClock(pageClockSerializer) {
     this.timerSerializer = new TimerSerializer();
     this.timer = new Timer(this.timerSerializer);
 
-    // TODO: Move this info into Timer class.
-    this.lastReset = new Date();
 
     // Read in matches info.
     this.pageClockSerializer = pageClockSerializer;
@@ -87,15 +82,7 @@ function PageClock(pageClockSerializer) {
         this.pageClockSerializer.writeMatches(this);
     }
 
-    this.getLastReset = function() { return this.lastReset; }
-
-    // TODO: Remove these functions in lieu of this.getTimer()
-    this.getTime = function() { return this.timer.getTime(); }
-    this.timerIsRunning = function() { return this.timer.isRunning(); }
-    this.resetTimer = function() {
-        this.timer.reset();
-        this.lastReset = new Date();
-    }
+    this.getTimer = function() { return this.timer; }
 
     // Update the timer when a new page loads
     this.update = function(url) {

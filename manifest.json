@@ -10,7 +10,11 @@
     },
 
     "background": {
-        "scripts": ["background.js"],
+        "scripts": [
+            "PageClock.js",
+            "Debugger.js",
+            "Timer.js"
+        ],
         "persistent": false
     },
 

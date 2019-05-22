@@ -1,11 +1,9 @@
-./background.js: this.readTime() | id:2201382d3f12910ce8d42cff48fb8e7f9c262385
-./background.js: Fix timer snapshot | id:49d3d0c92f35c0b1ab49da4a589e1a0ff26ddfbe
-./background.js: Update getTime | id:523f562002397cc2a14a87d2a90c34b0eb116fa2
-./background.js: Fix storage of matches | id:6534f8fe96f610e393638deb67c3dee93b56364a
+./PageClock.js: Unset debug | id:0081c5fff0e4e01435abd122c97676d349022584
+./PageClock.js: Fix storage of time | id:1bde99a01b092ddfd4038446364c82cc42dd0364
+./PageClock.js: Run when browser is closed? | id:29956aaa3bb29b5264a8030cb08c9b8836339ed3
+./PageClock.js: Run if this window is no longer focused? | id:3ac5c34172da652ae3b3bccc838d8d1a82284b7c
+./PageClock.js: Fix storage of matches | id:469dd2e4f54ff41e60ef8d212c75b727c80c3961
+./PageClock.js: Fix timer snapshot | id:556054b88e4817f816d3e38007241fb8deefa844
 ./popup.js: Timer does not stop running on updateButton listener | id:8e68bfcc4928271bd44b5048ce2704daa1bda2eb
-./background.js: Unset debug | id:91d2c5957aa1dd2e4bcdb628c1a4df8249fea3be
-./background.js: Date/time of last reset | id:969590f5260973ac5942eaea1792f0c4f3f5fe6b
-./background.js: Popup style sheet | id:a2836109fc6deef920c2749f23cfdb6f3e361539
-./background.js: Run if this window is no longer focused? | id:ad5bf4e59683a279124a4d880d9c8e6a36fcd168
-./background.js: Fix storage of time | id:d29444589e5ad78aba2f3ad27b32ca3759f05607
-./background.js: Run when browser is closed? | id:e1ec9de0af0a31f19408feea490e38621d8917f5
+./PageClock.js: Date/time of last reset | id:c2c220740e01eeaeef86acd895be9dac86a587d4
+./PageClock.js: Popup style sheet | id:d5cba0bc1819e870c7b6422f102fde1c61ed3a5c

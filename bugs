@@ -1,8 +1,6 @@
 ./PageClock.js: Unset debug | id:0081c5fff0e4e01435abd122c97676d349022584
 ./popup.js: Also make `.update()' to take an array in updateButton. | id:0d1ddb02d2903d4732ebce1f93f825900aecaadd
 ./PageClock.js: pass url as array to .update() | id:2873cbf1ae88ea8c0383d7c7453e2be45b7c1614
-./PageClock.js: Run when browser is closed? | id:29956aaa3bb29b5264a8030cb08c9b8836339ed3
-./PageClock.js: Run if this window is no longer focused? | id:3ac5c34172da652ae3b3bccc838d8d1a82284b7c
-./popup.js: Timer does not stop running on updateButton listener | id:8e68bfcc4928271bd44b5048ce2704daa1bda2eb
+./PageClock.js: Run iff: window is focused OR tab is playing audio | id:90d85b4dcf23accc84ed7d54646eba1f92abc5e1
 ./popup.js: Does not reset when timer is running | id:c68e6099b0e951cbb01778f7c41ffdc0fd03d609
 ./PageClock.js: Popup style sheet | id:d5cba0bc1819e870c7b6422f102fde1c61ed3a5c

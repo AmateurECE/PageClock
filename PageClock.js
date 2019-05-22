@@ -148,8 +148,7 @@ function updatedListener(tabId, changeInfo, tab) {
 }
 
 // Set up event listeners.
-// TODO: Run when browser is closed?
-// TODO: Run if this window is no longer focused?
+// TODO: Run iff: window is focused OR tab is playing audio
 chrome.tabs.onUpdated.addListener(updatedListener);
 chrome.tabs.onActivated.addListener(updatedListener);
 

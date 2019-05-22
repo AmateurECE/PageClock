@@ -15,10 +15,16 @@ function startTime() {
         var pageClock = backPage.thePageClock;
         var time = pageClock.getTimer().getTime();
         printTime(time);
+        // It's possible that the interval is running from a previous
+        // invocation, so first attempt to stop it.
+        if (intervalId !== null) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
         // Update the time every second, so it looks like we're continuously
         // counting
         if (pageClock.getTimer().isRunning()) {
-            setInterval(() => {
+            intervalId = setInterval(() => {
                 time = new Date(time.getTime() + 1000)
                 printTime(time);
             }, 1000);
@@ -60,6 +66,7 @@ function printLastReset() {
 ///
 
 // Initialize the page
+let intervalId = null;
 startTime();
 printLastReset();
 startTextarea();
@@ -82,10 +89,6 @@ updateButton.addEventListener('click', function(element) {
 
             // TODO: Also make `.update()' to take an array in updateButton.
             pageClock.update(tabs[0].url);
-            // TODO: Timer does not stop running on updateButton listener
-            // If the timer is currently running, and if after the updateButton
-            // event is triggered the current page is not on the matches list,
-            // the timer should stop running. This is not the case.
             startTime();
         });
     });

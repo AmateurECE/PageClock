@@ -10,6 +10,12 @@
 // LAST EDITED:     05/21/2019
 ////
 
+// TODO: Fix storage of time
+// TODO: Fix storage of matches
+// TODO: Fix timer snapshot
+// TODO: Popup style sheet
+// TODO: Date/time of last reset
+
 ///////////////////////////////////////////////////////////////////////////////
 // Class: Debugger
 ////
@@ -118,14 +124,8 @@ function PageClock(matches) {
         var self = this;
         var debug = self.debug.debug;
         debug('Updating...');
-
-        // The popup calls update when a change has been made to this.matches,
-        // but the popup doesn't know the current URL. So, it passes null, and
-        // we simply carry on as if it's changed.
-        if (null !== url) {
-            self.url = url; // Update the URL
-            debug('New URL: ' + url);
-        }
+        self.url = url; // Update the URL
+        debug('New URL: ' + url);
 
         // Stop timer, if it is running
         if (self.timer.isRunning()) {

@@ -1,7 +1,12 @@
 ./background.js: this.readTime() | id:2201382d3f12910ce8d42cff48fb8e7f9c262385
+./background.js: Fix timer snapshot | id:49d3d0c92f35c0b1ab49da4a589e1a0ff26ddfbe
 ./background.js: Update getTime | id:523f562002397cc2a14a87d2a90c34b0eb116fa2
-./popup.html: Page styles --> | id:6ba1c87db08bc7e69eed1795d3522069fef4402b
+./background.js: Fix storage of matches | id:6534f8fe96f610e393638deb67c3dee93b56364a
+./popup.js: Timer does not stop running on updateButton listener | id:8e68bfcc4928271bd44b5048ce2704daa1bda2eb
 ./background.js: Unset debug | id:91d2c5957aa1dd2e4bcdb628c1a4df8249fea3be
+./background.js: Date/time of last reset | id:969590f5260973ac5942eaea1792f0c4f3f5fe6b
+./background.js: Popup style sheet | id:a2836109fc6deef920c2749f23cfdb6f3e361539
 ./background.js: Run if this window is no longer focused? | id:ad5bf4e59683a279124a4d880d9c8e6a36fcd168
 ./background.js: Check that tabs has exactly one entry. | id:c7807d31c1c6fc934368423a09e14f306ef172fa
+./background.js: Fix storage of time | id:d29444589e5ad78aba2f3ad27b32ca3759f05607
 ./background.js: Run when browser is closed? | id:e1ec9de0af0a31f19408feea490e38621d8917f5

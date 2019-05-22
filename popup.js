@@ -42,7 +42,8 @@ function zeroExtend(i) {
 function startTextarea() {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
-        document.getElementById('textarea').innerHTML = pageClock.getMatches();
+        document.getElementById('textarea').innerHTML =
+            pageClock.getMatches().join('\n');
     });
 }
 
@@ -55,11 +56,17 @@ startTextarea();
 let updateButton = document.getElementById('update');
 updateButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
-        var pageClock = backPage.thePageClock;
-        var textInput = document.getElementById('textarea').value;
-        pageClock.setMatches(textInput.split('\n'));
-        pageClock.update(null);
-        startTime();
+        chrome.tabs.query({'active': true}, (tabs) =>{
+            var pageClock = backPage.thePageClock;
+            var textInput = document.getElementById('textarea').value;
+            pageClock.setMatches(textInput.split('\n'));
+            pageClock.update(tabs[0].url);
+            // TODO: Timer does not stop running on updateButton listener
+            // If the timer is currently running, and if after the updateButton
+            // event is triggered the current page is not on the matches list,
+            // the timer should stop running. This is not the case.
+            startTime();
+        });
     });
 });
 

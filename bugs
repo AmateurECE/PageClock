@@ -5,5 +5,5 @@
 ./PageClock.js: Fix storage of matches | id:469dd2e4f54ff41e60ef8d212c75b727c80c3961
 ./PageClock.js: Fix timer snapshot | id:556054b88e4817f816d3e38007241fb8deefa844
 ./popup.js: Timer does not stop running on updateButton listener | id:8e68bfcc4928271bd44b5048ce2704daa1bda2eb
-./PageClock.js: Date/time of last reset | id:c2c220740e01eeaeef86acd895be9dac86a587d4
+./popup.js: Does not reset when timer is running | id:c68e6099b0e951cbb01778f7c41ffdc0fd03d609
 ./PageClock.js: Popup style sheet | id:d5cba0bc1819e870c7b6422f102fde1c61ed3a5c

@@ -47,12 +47,24 @@ function startTextarea() {
     });
 }
 
+function printLastReset() {
+    chrome.runtime.getBackgroundPage((backPage) => {
+        var pageClock = backPage.thePageClock;
+        document.getElementById('lastReset').innerHTML =
+            pageClock.getLastReset();
+    });
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Main
 ///
 
+// Initialize the page
 startTime();
+printLastReset();
 startTextarea();
+
+// Set up event handlers
 let updateButton = document.getElementById('update');
 updateButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
@@ -76,6 +88,10 @@ resetButton.addEventListener('click', function(element) {
         var pageClock = backPage.thePageClock;
         pageClock.resetTimer();
         printTime(pageClock.getTime());
+        printLastReset();
+        // TODO: Does not reset when timer is running
+        // If the timer is running when the reset button is clicked, the timer
+        // will flash zero and then continue counting up.
     });
 });
 

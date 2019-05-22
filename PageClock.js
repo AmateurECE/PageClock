@@ -14,7 +14,6 @@
 // TODO: Fix storage of matches
 // TODO: Fix timer snapshot
 // TODO: Popup style sheet
-// TODO: Date/time of last reset
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class: PageClock
@@ -26,6 +25,7 @@ function PageClock(matches) {
     this.url = null;
     this.debug = new Debugger();
     this.timer = new Timer();
+    this.lastReset = new Date();
 
     // Getters and Setters
     this.getUrl = function()    { return this.url; }
@@ -40,9 +40,14 @@ function PageClock(matches) {
     this.getMatches = function()        { return this.matches; }
     this.setMatches = function(matches) { this.matches = matches; }
 
+    this.getLastReset = function() { return this.lastReset; }
+
     this.getTime = function() { return this.timer.getTime(); }
     this.timerIsRunning = function() { return this.timer.isRunning(); }
-    this.resetTimer = function() { this.timer.reset(); }
+    this.resetTimer = function() {
+        this.timer.reset();
+        this.lastReset = new Date();
+    }
 
     // Update the timer when a new page loads
     this.update = function(url) {

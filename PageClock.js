@@ -10,7 +10,6 @@
 // LAST EDITED:     05/22/2019
 ////
 
-// TODO: Fix storage of time
 // TODO: Fix timer snapshot
 // TODO: Popup style sheet
 
@@ -60,7 +59,12 @@ function PageClock(pageClockSerializer) {
     this.matches = null;
     this.url = null;
     this.debug = new Debugger(true);
-    this.timer = new Timer();
+
+    // Initialize the Timer
+    this.timerSerializer = new TimerSerializer();
+    this.timer = new Timer(this.timerSerializer);
+
+    // TODO: Move this info into Timer class.
     this.lastReset = new Date();
 
     // Read in matches info.
@@ -85,6 +89,7 @@ function PageClock(pageClockSerializer) {
 
     this.getLastReset = function() { return this.lastReset; }
 
+    // TODO: Remove these functions in lieu of this.getTimer()
     this.getTime = function() { return this.timer.getTime(); }
     this.timerIsRunning = function() { return this.timer.isRunning(); }
     this.resetTimer = function() {

@@ -13,8 +13,7 @@
 function startTime() {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
-        var time = pageClock.getTimer().getTime();
-        printTime(time);
+        printTime(pageClock.getTimer().getTime());
         // It's possible that the interval is running from a previous
         // invocation, so first attempt to stop it.
         if (intervalId !== null) {
@@ -25,8 +24,7 @@ function startTime() {
         // counting
         if (pageClock.getTimer().isRunning()) {
             intervalId = setInterval(() => {
-                time = new Date(time.getTime() + 1000)
-                printTime(time);
+                printTime(pageClock.getTimer().getTime());
             }, 1000);
         }
     });
@@ -99,11 +97,8 @@ resetButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
         pageClock.getTimer().reset();
-        printTime(pageClock.getTimer().getTime());
+        startTime();
         printLastReset();
-        // TODO: Does not reset when timer is running
-        // If the timer is running when the reset button is clicked, the timer
-        // will flash zero and then continue counting up.
     });
 });
 

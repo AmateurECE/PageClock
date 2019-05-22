@@ -118,6 +118,8 @@ function Timer(timerSerializer) {
     this.reset = function() {
         this.time = new Date(0);
         this.lastReset = new Date();
+        this.startTime = this.lastReset;
+        this.debug.debug('Resetting timer: time = ' + this.time);
     }
 
 }

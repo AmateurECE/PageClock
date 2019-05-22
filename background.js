@@ -167,7 +167,9 @@ chrome.runtime.onInstalled.addListener(function() {
 function updatedListener(tabId, changeInfo, tab) {
     chrome.tabs.query({"active": true},
                       function(tabs) {
-                          // TODO: Check that tabs has exactly one entry.
+                          if (tabs.length != 1) {
+                              console.warn("`tabs' has more than one entry.");
+                          }
                           if (tabs[0].url != thePageClock.getUrl()) {
                               thePageClock.update(tabs[0].url);
                           }

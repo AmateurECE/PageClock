@@ -7,6 +7,5 @@
 ./background.js: Date/time of last reset | id:969590f5260973ac5942eaea1792f0c4f3f5fe6b
 ./background.js: Popup style sheet | id:a2836109fc6deef920c2749f23cfdb6f3e361539
 ./background.js: Run if this window is no longer focused? | id:ad5bf4e59683a279124a4d880d9c8e6a36fcd168
-./background.js: Check that tabs has exactly one entry. | id:c7807d31c1c6fc934368423a09e14f306ef172fa
 ./background.js: Fix storage of time | id:d29444589e5ad78aba2f3ad27b32ca3759f05607
 ./background.js: Run when browser is closed? | id:e1ec9de0af0a31f19408feea490e38621d8917f5

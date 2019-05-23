@@ -10,6 +10,9 @@
 // LAST EDITED:     05/22/2019
 ////
 
+// TODO: icons
+// TODO: Change icon when timer is running.
+
 function startTime() {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
@@ -73,22 +76,19 @@ startTextarea();
 let updateButton = document.getElementById('update');
 updateButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
-        chrome.tabs.query({'active': true}, (tabs) =>{
-            var pageClock = backPage.thePageClock;
-            var textInput = document.getElementById('textarea').value;
+        var pageClock = backPage.thePageClock;
+        var textInput = document.getElementById('textarea').value;
 
-            // If textInput is empty, .split('\n') creates the array [""], when
-            // really we want [].
-            if (textInput == '') {
-                pageClock.setMatches([]);
-            } else {
-                pageClock.setMatches(textInput.split('\n'));                
-            }
+        // If textInput is empty, .split('\n') creates the array [""], when
+        // really we want [].
+        if (textInput == '') {
+            pageClock.setMatches([]);
+        } else {
+            pageClock.setMatches(textInput.split('\n'));
+        }
 
-            // TODO: Also make `.update()' to take an array in updateButton.
-            pageClock.update(tabs[0].url);
-            startTime();
-        });
+        pageClock.filteredUpdate();
+        startTime();
     });
 });
 

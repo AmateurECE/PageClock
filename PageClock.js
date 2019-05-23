@@ -7,10 +7,24 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/22/2019
+// LAST EDITED:     05/23/2019
 ////
 
 // TODO: Popup style sheet
+
+function arraysEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length != b.length) return false;
+
+    a.sort();
+    b.sort();
+
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class: PageClockSerializer
@@ -53,8 +67,7 @@ function PageClockSerializer() {
 
 function PageClock(pageClockSerializer) {
     // Instance attributes
-    this.matches = null;
-    this.url = null;
+    this.urls = [];
     this.debug = new Debugger(true);
 
     // Initialize the Timer
@@ -85,12 +98,15 @@ function PageClock(pageClockSerializer) {
     this.getTimer = function() { return this.timer; }
 
     // Update the timer when a new page loads
-    this.update = function(url) {
+    this.update = function(urls) {
         var self = this;
         var debug = self.debug.debug;
+        if (arraysEqual(urls, self.urls)) {
+            return;
+        }
+
         debug('Updating...');
-        self.url = url; // Update the URL
-        debug('New URL: ' + url);
+        self.urls = urls;
 
         // Stop timer, if it is running
         if (self.timer.isRunning()) {
@@ -98,13 +114,52 @@ function PageClock(pageClockSerializer) {
         }
 
         // Determine if we also need to start the timer
-        debug('Testing matches against url: ' + self.url);
-        self.matches.forEach(function(element) {
-            debug('Testing: ' + element);
-            if (self.url.indexOf(element) !== -1) {
-                // Start the timer
-                debug('Matches: ' + element);
-                self.timer.start();
+        for (let i = 0; i < self.urls.length; i++) {
+            debug('Testing URL: ' + self.urls[i]);
+            for (let j = 0; j < self.matches.length; i++) {
+                if (self.urls[i].indexOf(self.matches[j]) !== -1) {
+                    // Found a match
+                    debug('Matches Rule: ' + self.matches[j]);
+                    self.timer.start();
+                    return;
+                }
+            }
+        }
+    }
+
+    // Filter the array of Tab objects and invoke .update() to update the state
+    // of the timer.
+    this.filteredUpdate = function() {
+        chrome.tabs.query({'active': true}, (tabs) => {
+            var self = this;
+            var filteredUrls = [];
+            var semaphore = tabs.length;
+
+            // Create an event--The Chrome API doesn't seem to handle the
+            // combination of callbacks and promises very well.
+            var promise = new Event('PageClock.promise');
+            const promiseHandler = (e) => {
+                // This is actually executed AFTER the event is dispatched
+                // (below)
+                self.update(filteredUrls);
+                document.removeEventListener('PageClock.promise',
+                                             promiseHandler);
+            }
+
+            document.addEventListener('PageClock.promise', promiseHandler);
+            for (let i = 0; i < tabs.length; i++) {
+                chrome.windows.get(tabs[i].windowId, undefined, (window) => {
+                    // The tab goes into the filteredUrls array iff the
+                    // window is focused OR the tab is playing audio
+                    if (tabs[i].audible || window.focused) {
+                        filteredUrls.push(tabs[i].url);
+                    }
+
+                    semaphore -= 1; // Signal that we've finished.
+                    if (!semaphore) {
+                        document.dispatchEvent(promise);
+                    }
+                });
             }
         });
     }
@@ -120,6 +175,7 @@ var thePageClock = null;
 chrome.runtime.onInstalled.addListener(function() {
     thePageClockSerializer = new PageClockSerializer();
     thePageClock = new PageClock(thePageClockSerializer);
+    thePageClock.filteredUpdate();
     // TODO: Unset debug
     // thePageClock.setDebug(null);
 
@@ -132,24 +188,13 @@ chrome.runtime.onInstalled.addListener(function() {
 // - The Tab object experiences an update to its attributes
 // - A different Tab becomes active.
 function updatedListener(tabId, changeInfo, tab) {
-    chrome.tabs.query({"active": true},
-                      function(tabs) {
-                          // TODO: pass url as array to .update()
-                          // `tabs' has more than one entry when there is more
-                          // than one window. Since this is pretty common, we
-                          // should be sure to account for it.
-                          if (tabs.length != 1) {
-                              console.warn("`tabs' has more than one entry.");
-                          }
-                          if (tabs[0].url != thePageClock.getUrl()) {
-                              thePageClock.update(tabs[0].url);
-                          }
-                      });
+    thePageClock.filteredUpdate();
 }
 
 // Set up event listeners.
-// TODO: Run iff: window is focused OR tab is playing audio
+// TODO: Stop timer when chrome is closed.
 chrome.tabs.onUpdated.addListener(updatedListener);
 chrome.tabs.onActivated.addListener(updatedListener);
+chrome.windows.onFocusChanged.addListener(updatedListener);
 
 ///////////////////////////////////////////////////////////////////////////////

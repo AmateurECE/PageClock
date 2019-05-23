@@ -1,5 +1,5 @@
 ./PageClock.js: Unset debug | id:0081c5fff0e4e01435abd122c97676d349022584
-./popup.js: Also make `.update()' to take an array in updateButton. | id:0d1ddb02d2903d4732ebce1f93f825900aecaadd
-./PageClock.js: pass url as array to .update() | id:2873cbf1ae88ea8c0383d7c7453e2be45b7c1614
-./PageClock.js: Run iff: window is focused OR tab is playing audio | id:90d85b4dcf23accc84ed7d54646eba1f92abc5e1
+./popup.js: Change icon when timer is running. | id:4548b548f33dab4e956f78beeeff5ceb1f4db638
+./popup.js: icons | id:90a2a44d1b0f295ecf326e899377be4ab45231cd
 ./PageClock.js: Popup style sheet | id:d5cba0bc1819e870c7b6422f102fde1c61ed3a5c
+./PageClock.js: Stop timer when chrome is closed. | id:d9dbba1612eb354292218ca3c721354dd9dd4a8a

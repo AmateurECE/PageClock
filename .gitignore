@@ -1,0 +1,5 @@
+.venv/
+Pipfile.lock
+hash-cache/
+http/
+wheels/

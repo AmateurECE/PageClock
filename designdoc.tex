@@ -1,0 +1,128 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NAME:             designdoc.tex
+%
+% AUTHOR:           Ethan D. Twardy <edtwardy@mtu.edu>
+%
+% DESCRIPTION:      Retroactive design document.
+%
+% CREATED:          05/23/2019
+%
+% LAST EDITED:      05/24/2019
+%%%
+
+\documentclass{designdoc}
+
+\begin{document}
+\section{Introduction}
+% TODO: Introduction
+
+\section{Software Requirements}
+\swrequirement{Timer}
+The \textbf{Timer} shall be a software implement that records duration in the
+precision of hours, minutes, and seconds, at least. The timer has two states:
+\begin{enumerate}
+\item \textbf{Active}: The timer is currently recording.
+\item \textbf{Inactive}: The timer is not currently recording.
+\end{enumerate}
+
+\swrequirement{Timer Activation Conditions}
+The \textbf{Timer} shall be activated when ONE of the following conditions has
+been met:
+\begin{enumerate}
+\item A tab that is playing audio is currently displaying a web page that
+  matches one of the entries in the \textbf{Matching URLs} list.
+\item The active tab in a focused window is currently displaying a web page
+  that matches one of the entries in the \textbf{Matching URLs} list.
+\end{enumerate}
+In this context, a tab \textit{displays} a web page whether or not the web page
+content is visible to the user at the current moment, as long as the web page
+content is loaded into memory.
+
+\swrequirement{Timer Deactivation Conditions}
+The \textbf{Timer} shall become inactive when neither of the \textbf{Timer
+  Activation Conditions} has been met.
+
+\swrequirement{Matching URLs}
+A list of partial or complete URLs set by the user. Crucial for the
+\textbf{Timer Activation Conditions}.
+
+\swrequirement{Total Time}
+The \textbf{Total Time} shall be the total amount of time since the
+\textbf{Last Reset Date} during which the \textbf{Timer} was active.
+
+\swrequirement{Last Reset Date}
+The \textbf{Last Reset Date} shall be the date at which the \textbf{Total Time}
+was last reset to zero hours, zero minutes and zero seconds.
+
+\swrequirement{PageClock Icon}
+The extension shall have an icon image. This icon will be displayed in the
+upper right hand side of the Google Chrome toolbar.
+
+\swrequirement{PageClock Icon: Color Change}
+The \textbf{PageClock Icon} shall change color when the timer is running.
+
+\swrequirement{Interface: Popup Window}
+The \textbf{Popup Window} shall be the only interface between the user and the
+extension logic. The \textbf{Popup Window} can be accessed by clicking on the
+\textbf{PageClock Icon} in the upper right hand side of the Chrome toolbar.
+When the \textbf{Popup Window} is being displayed, this is referred to as an
+\textit{instance} of the \textbf{Popup Window}.
+
+\swrequirement{Popup Window: Display Information}
+The \textbf{Popup Window} shall display the \textbf{Last Reset Date},
+\textbf{Total Time}, and \textbf{Matching URLs}.
+
+\swrequirement{Popup Window: Running Time}
+The \textbf{Popup Window} shall display the \textbf{Total Time} as a running
+counter (i.e. if the \textbf{Timer} is active, the \textbf{Total Time} field in
+the \textbf{Popup Window} shall increment by one second once every one second,
+one minute once every one minute, and so on).
+
+\swrequirement{Reset Button}
+The \textbf{Reset Button} shall, when clicked, cause the following events to
+occur:
+\begin{enumerate}
+\item The extension shall reset the \textbf{Total Time} to zero hours, zero
+  minutes, and zero seconds.
+\item The extension shall change the \textbf{Last Reset Date} to the date and
+  time at which the \textbf{Reset Button} was clicked.
+\item The extension shall repaint the \textbf{Popup Window} to contain the most
+  recent \textbf{Display Information}.
+\end{enumerate}
+The \textbf{Reset Button} shall have no bearing on the state of the
+\textbf{Timer}.
+
+\swrequirement{Matching URLs Textarea}
+The \textbf{Matching URLs Textarea} is an editable HTML Textarea that displays
+the \textbf{Matching URLs} since the last time that the \textbf{Update Button}
+was clicked. The user shall use the \textbf{Matching URLs Textarea} to make any
+changes to the entries in the \textbf{Matching URLs} list.
+
+\swrequirement{Update Button}
+The \textbf{Update Button} shall, when clicked, cause the following events to
+occur:
+\begin{enumerate}
+\item The extension shall read the text in the \textbf{Matching URLs Textarea}
+  as a \textit{newline} (\texttt{'\textbackslash{}n'}) \textit{separated list}.
+  This list shall become the new \textbf{Matching URLs} list.
+\item The extension shall reevaluate the \textbf{Timer Activation Conditions}
+  and, if necessary, activate or deactivate the timer accordingly.
+\item The extension shall repaint the \textbf{Popup Window} to contain the most
+  recent \textbf{Display Information}.
+\end{enumerate}
+
+\swrequirement{Data Permanence: Affected Data}
+The \textbf{Last Reset Date}, \textbf{Total Time} and \textbf{Matching URLs}
+shall have \textbf{Data Permanence}.
+
+\swrequirement{Data Permanence: Saved State Through Browser Restart}
+The state of all data which has \textbf{Data Permanence} shall persist beyond
+the current running instance of the browser.
+
+\swrequirement{Data Permanence: Saved State Through Examination}
+The state of all data which has \textbf{Data Permanence} shall persist beyond
+the current running instance of the \textbf{Popup Window}.
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

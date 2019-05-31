@@ -170,15 +170,14 @@ function PageClock(pageClockSerializer) {
 ///
 
 // Called when the background script is installed. Initializes thePageClock.
-var thePageClockSerializer = null;
-var thePageClock = null;
-chrome.runtime.onInstalled.addListener(function() {
-    thePageClockSerializer = new PageClockSerializer();
-    thePageClock = new PageClock(thePageClockSerializer);
-    thePageClock.filteredUpdate();
-    // TODO: Unset debug
-    // thePageClock.setDebug(null);
+var thePageClockSerializer = new PageClockSerializer();
+var thePageClock = new PageClock(thePageClockSerializer);
+thePageClock.filteredUpdate();
+// TODO: Unset debug
+// thePageClock.setDebug(null);
 
+// Print a cute little welcome message
+chrome.runtime.onInstalled.addListener(function() {
     // Welcome message
     console.log('Installed PageClock v'
                 + chrome.runtime.getManifest().version);

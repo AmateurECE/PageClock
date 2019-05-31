@@ -11,9 +11,9 @@
 
     "background": {
         "scripts": [
-            "PageClock.js",
             "Debugger.js",
-            "Timer.js"
+            "Timer.js",
+            "PageClock.js"
         ],
         "persistent": false
     },

@@ -7,13 +7,14 @@
 //
 // CREATED:         05/21/2019
 //
-// LAST EDITED:     05/22/2019
+// LAST EDITED:     05/31/2019
 ////
 
 // Return true if obj is an empty object.
 function isEmpty(obj) {
-    return Object.entries(obj).length === 0
-        && obj.constructor === Object;
+    return obj === null || typeof obj === 'undefined'
+        || (Object.entries(obj).length === 0
+            && obj.constructor === Object);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,36 +22,33 @@ function isEmpty(obj) {
 ////
 
 function TimerSerializer() {
-    this.timeName = 'PageClock.time';
-    this.lastResetName = 'PageClock.lastReset';
+    this.timeName = 'time';
+    this.lastResetName = 'lastReset';
 
     // Read/Initialize the current time variable from app storage
     this.readTime = function(timer) {
-        var dict = {};
-        dict[this.timeName] = null;
-        dict[this.lastResetName] = null;
-        chrome.storage.sync.get(dict, (time) => {
+        var keys = [this.timeName, this.lastResetName];
+        chrome.storage.local.get(keys, (time) => {
             var self = this;
+
+            timer.debug.debug('Reading time from storage...');
             if (typeof chrome.runtime.lastError !== 'undefined') {
                 console.error(chrome.runtime.lastError);
             }
 
             // Load the time
             // Check if the object is empty. If it is, create a new date.
-            if (time[self.timeName] === null
-                || time[self.lastResetName] === null
-                || isEmpty(time[self.timeName])
+            if (isEmpty(time[self.timeName])
                 || isEmpty(time[self.lastResetName])) {
                 console.warn('Could not read time from storage. '
                              + 'Resetting timer and last reset date.');
-                timer.time = new Date(0);
-                timer.lastReset = new Date();
+                timer.reset();
             } else {
                 timer.time = new Date(JSON.parse(time[self.timeName]));
                 timer.lastReset =
                     new Date(JSON.parse(time[self.lastResetName]));
             }
-        })
+        });
     }
 
     // Write/Save the current time variable into app storage
@@ -58,7 +56,8 @@ function TimerSerializer() {
         var dict = {};
         dict[this.timeName] = JSON.stringify(timer.time);
         dict[this.lastResetName] = JSON.stringify(timer.lastReset);
-        chrome.storage.sync.set(dict, () => {
+        chrome.storage.local.set(dict, () => {
+            timer.debug.debug('Writing time to storage...');
             if (typeof chrome.runtime.lastError !== 'undefined') {
                 console.error(chrome.runtime.lastError);
                 console.warn('Could not write time to storage.');
@@ -120,6 +119,8 @@ function Timer(timerSerializer) {
         this.lastReset = new Date();
         this.startTime = this.lastReset;
         this.debug.debug('Resetting timer: time = ' + this.time);
+        // Save the time to storage
+        this.timerSerializer.writeTime(this);
     }
 
 }

@@ -7,7 +7,7 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/22/2019
+// LAST EDITED:     05/31/2019
 ////
 
 // TODO: icons
@@ -87,7 +87,11 @@ updateButton.addEventListener('click', function(element) {
             pageClock.setMatches(textInput.split('\n'));
         }
 
-        pageClock.filteredUpdate();
+        // TODO: Race condition in updateHandler
+        // Sometimes, when a new entry is added to `matches' that fits one of
+        // the Timer Activation Conditions, the on-page timer will check the
+        // state of the timer before it has been updated, so the timer will
+        // start, but the on-page timer will not.
         startTime();
     });
 });

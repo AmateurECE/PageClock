@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// NAME:            background.js
+// NAME:            PageClock.js
 //
 // AUTHOR:          Ethan D. Twardy <edtwardy@mtu.edu>
 //
@@ -7,11 +7,23 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/23/2019
+// LAST EDITED:     05/31/2019
 ////
 
 // TODO: Popup style sheet
 
+///////////////////////////////////////////////////////////////////////////////
+// Common Functions
+////
+
+// Return true if obj contains no real data.
+function isEmpty(obj) {
+    return obj === null || typeof obj === 'undefined'
+        || (Object.entries(obj).length === 0
+            && obj.constructor === Object);
+}
+
+// Return true if the arrays are equal.
 function arraysEqual(a, b) {
     if (a === b) return true;
     if (a == null || b == null) return false;
@@ -31,18 +43,21 @@ function arraysEqual(a, b) {
 ////
 
 function PageClockSerializer() {
-    this.matchName = 'PageClock.matches';
+    this.matchName = 'matches';
 
     // Read the matches from Chrome user storage.
     this.readMatches = function(pageClock) {
-        var dict = {};
-        dict[this.matchName] = [];
-        chrome.storage.sync.get(dict, (matches) => {
+        chrome.storage.local.get(this.matchName, (matches) => {
             var self = this;
-            if (typeof chrome.runtime.lastError !== 'undefined') {
-                console.error(chrome.runtime.lastError);
+
+            pageClock.debug.debug('Reading matches from storage...');
+            if (isEmpty(matches)) {
+                if (typeof chrome.runtime.lastError !== 'undefined') {
+                    console.error(chrome.runtime.lastError);
+                }
                 console.warn("Using empty array for `matches'");
                 pageClock.matches = new Array();
+                self.writeMatches(pageClock);
             } else {
                 pageClock.matches = matches[self.matchName];
             }
@@ -53,7 +68,8 @@ function PageClockSerializer() {
     this.writeMatches = function(pageClock) {
         var dict = {};
         dict[this.matchName] = pageClock.matches;
-        chrome.storage.sync.set(dict, () => {
+        chrome.storage.local.set(dict, () => {
+            pageClock.debug.debug('Writing matches to storage...');
             if (typeof chrome.runtime.lastError !== 'undefined') {
                 console.error(chrome.runtime.lastError);
             }
@@ -80,8 +96,8 @@ function PageClock(pageClockSerializer) {
     this.pageClockSerializer.readMatches(this);
 
     // Getters and Setters
-    this.getUrl = function()    { return this.url; }
-    this.setUrl = function(url) { this.url = url; }
+    this.getUrls = function()    { return this.urls; }
+    this.setUrls = function(urls) { this.urls = urls; }
 
     this.getDebug = function()      { return this.debug; }
     this.setDebug = function(debug) {
@@ -92,44 +108,49 @@ function PageClock(pageClockSerializer) {
     this.getMatches = function()        { return this.matches; }
     this.setMatches = function(matches) {
         this.matches = matches;
+        this.filteredUpdate(forced=true);
         this.pageClockSerializer.writeMatches(this);
     }
 
     this.getTimer = function() { return this.timer; }
 
     // Update the timer when a new page loads
-    this.update = function(urls) {
+    this.update = function(urls, forced=false) {
         var self = this;
         var debug = self.debug.debug;
-        if (arraysEqual(urls, self.urls)) {
+        debug('Urls: ' + urls);
+        debug('Self: ' + self.urls);
+        if (arraysEqual(urls, self.urls) && !forced) {
+            debug('Arrays are equal, no update performed.');
             return;
         }
 
         debug('Updating...');
         self.urls = urls;
 
-        // Stop timer, if it is running
-        if (self.timer.isRunning()) {
-            self.timer.stop();
-        }
-
-        // Determine if we also need to start the timer
+        // Determine if this update matches, start the timer if it's not
+        // already running.
         for (let i = 0; i < self.urls.length; i++) {
             debug('Testing URL: ' + self.urls[i]);
-            for (let j = 0; j < self.matches.length; i++) {
+            for (let j = 0; j < self.matches.length; j++) {
                 if (self.urls[i].indexOf(self.matches[j]) !== -1) {
                     // Found a match
                     debug('Matches Rule: ' + self.matches[j]);
-                    self.timer.start();
+                    if (!self.timer.isRunning()) {
+                        self.timer.start();
+                    }
                     return;
                 }
             }
         }
+
+        // If we got to here, we need to stop the timer.
+        self.timer.stop();
     }
 
     // Filter the array of Tab objects and invoke .update() to update the state
     // of the timer.
-    this.filteredUpdate = function() {
+    this.filteredUpdate = function(forced=false) {
         chrome.tabs.query({'active': true}, (tabs) => {
             var self = this;
             var filteredUrls = [];
@@ -141,7 +162,7 @@ function PageClock(pageClockSerializer) {
             const promiseHandler = (e) => {
                 // This is actually executed AFTER the event is dispatched
                 // (below)
-                self.update(filteredUrls);
+                self.update(filteredUrls, forced=forced);
                 document.removeEventListener('PageClock.promise',
                                              promiseHandler);
             }

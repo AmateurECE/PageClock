@@ -1,7 +1,6 @@
 ./PageClock.js: Unset debug | id:0081c5fff0e4e01435abd122c97676d349022584
 ./popup.js: Race condition in updateHandler | id:03683044187e3d6cea40076f1fe8d3c4598cfa67
 ./popup.js: Change icon when timer is running. | id:4548b548f33dab4e956f78beeeff5ceb1f4db638
-./popup.js: icons | id:90a2a44d1b0f295ecf326e899377be4ab45231cd
 ./PageClock.js: Popup style sheet | id:d5cba0bc1819e870c7b6422f102fde1c61ed3a5c
 ./designdoc.tex: Introduction | id:d9068295ab60dd22174c76463fffbf2346ee2173
 ./PageClock.js: Stop timer when chrome is closed. | id:d9dbba1612eb354292218ca3c721354dd9dd4a8a

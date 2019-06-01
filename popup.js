@@ -10,8 +10,8 @@
 // LAST EDITED:     05/31/2019
 ////
 
-// TODO: icons
 // TODO: Change icon when timer is running.
+//     Using: chrome.browserAction.setIcon({path: icon});
 
 function startTime() {
     chrome.runtime.getBackgroundPage((backPage) => {

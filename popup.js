@@ -40,11 +40,13 @@ function updateTime() {
 }
 
 function printTime(time) {
-    // The Unix Epoch starts at 1900 hours, hence we subtract 19 hours.
-    document.getElementById('time').innerHTML =
-        zeroExtend(time.getHours() - 19) + 'h '
-        + zeroExtend(time.getMinutes()) + 'm '
-        + zeroExtend(time.getSeconds()) + 's';
+    // This may seem complicated. Since the Unix Epoch started at 1900 hours,
+    // we can't simply get the hours, or we would end up with weird behavior.
+    var timeString = zeroExtend(Math.floor(time / (60 * 60000 * 24))) + 'd '
+        + zeroExtend(Math.floor(time / (60 * 60000)) % 24) + 'h '
+        + zeroExtend(Math.floor(time / 60000) % 60) + 'm '
+        + zeroExtend(Math.floor(time / 1000) % 60) + 's'
+    document.getElementById('time').innerHTML = timeString;
 }
 
 function zeroExtend(i) {

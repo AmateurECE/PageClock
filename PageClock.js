@@ -7,10 +7,11 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/31/2019
+// LAST EDITED:     06/11/2019
 ////
 
 // TODO: Popup style sheet
+// TODO: Pack this extension
 
 ///////////////////////////////////////////////////////////////////////////////
 // Common Functions
@@ -144,8 +145,10 @@ function PageClock(pageClockSerializer) {
             }
         }
 
-        // If we got to here, we need to stop the timer.
-        self.timer.stop();
+        // If we got to here and the timer is running, we need to stop it.
+        if (self.timer.isRunning()) {
+            self.timer.stop();
+        }
     }
 
     // Filter the array of Tab objects and invoke .update() to update the state

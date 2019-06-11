@@ -7,13 +7,19 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     05/31/2019
+// LAST EDITED:     06/11/2019
 ////
 
-// TODO: Change icon when timer is running.
-//     Using: chrome.browserAction.setIcon({path: icon});
+// TODO: Show badge when timer is running.
+//   The badge will look something like this, in a nice light blue:
+//     *     *
+//     * * * *
+//     *  *  *
+//     *     *
+//      *   *
+//        *
 
-function startTime() {
+function updateTime() {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
         printTime(pageClock.getTimer().getTime());
@@ -68,9 +74,15 @@ function printLastReset() {
 
 // Initialize the page
 let intervalId = null;
-startTime();
+updateTime();
 printLastReset();
 startTextarea();
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.msg === 'Timer.stateChange') {
+        updateTime();
+    }
+});
 
 // Set up event handlers
 let updateButton = document.getElementById('update');
@@ -86,13 +98,6 @@ updateButton.addEventListener('click', function(element) {
         } else {
             pageClock.setMatches(textInput.split('\n'));
         }
-
-        // TODO: Race condition in updateHandler
-        // Sometimes, when a new entry is added to `matches' that fits one of
-        // the Timer Activation Conditions, the on-page timer will check the
-        // state of the timer before it has been updated, so the timer will
-        // start, but the on-page timer will not.
-        startTime();
     });
 });
 
@@ -101,7 +106,7 @@ resetButton.addEventListener('click', function(element) {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;
         pageClock.getTimer().reset();
-        startTime();
+        updateTime();
         printLastReset();
     });
 });

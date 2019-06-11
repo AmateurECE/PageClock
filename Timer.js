@@ -7,7 +7,7 @@
 //
 // CREATED:         05/21/2019
 //
-// LAST EDITED:     05/31/2019
+// LAST EDITED:     06/11/2019
 ////
 
 // Return true if obj is an empty object.
@@ -101,6 +101,9 @@ function Timer(timerSerializer) {
         this.startTime = new Date();
         debug('Starting timer');
         this.running = true;
+        chrome.runtime.sendMessage({
+            'msg': 'Timer.stateChange'
+        });
     }
 
     // Stop the timer (increment this.time by the time that's elapsed)
@@ -112,6 +115,9 @@ function Timer(timerSerializer) {
         // Save the time to storage.
         this.timerSerializer.writeTime(this);
         this.running = false;
+        chrome.runtime.sendMessage({
+            'msg': 'Timer.stateChange'
+        });
     }
 
     this.reset = function() {

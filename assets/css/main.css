@@ -1,0 +1,12 @@
+
+
+* {
+    font-family: helvetica;
+    /* Google 'rgb color picker' for a nice color palette selector. */
+    background:rgba(252, 253, 255, 1);
+}
+
+textarea {
+    outline: none; /* Remove the blue outline when selected */
+    resize: none; /* Remove the resize handle */
+}

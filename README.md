@@ -6,4 +6,4 @@ the length of time spent on particular websites. For more information on
 
 # Compatibilities #
 
-This extension is compatible with Google Chrome version 73.
+This extension is compatible with Google Chrome version 73 and newer.

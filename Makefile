@@ -8,11 +8,11 @@
 #
 # CREATED:          05/23/2019
 #
-# LAST EDITED:      05/23/2019
+# LAST EDITED:      06/11/2019
 ###
 
 flags=-shell-escape
-dep=minted/source/minted.sty
+dep=
 
 # Force pipenv to put the package cache here
 export PIPENV_CACHE_DIR=$(PWD)

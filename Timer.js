@@ -18,6 +18,37 @@ function isEmpty(obj) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// Class: TimerEvent
+////
+
+
+class TimerEvent {
+    static dispatchInactive() {
+        chrome.runtime.sendMessage({
+            'msg': 'Timer.stateChange',
+            'data': {
+                'running': false
+            }
+        });
+        document.dispatchEvent(new CustomEvent('Timer.stateChange', {
+            'detail': false
+        }));
+    }
+
+    static dispatchActive() {
+        chrome.runtime.sendMessage({
+            'msg': 'Timer.stateChange',
+            'data': {
+                'running': true
+            }
+        });
+        document.dispatchEvent(new CustomEvent('Timer.stateChange', {
+            'detail': true
+        }));
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // Class: TimerSerializer
 ////
 
@@ -101,9 +132,7 @@ function Timer(timerSerializer) {
         this.startTime = new Date();
         debug('Starting timer');
         this.running = true;
-        chrome.runtime.sendMessage({
-            'msg': 'Timer.stateChange'
-        });
+        TimerEvent.dispatchActive();
     }
 
     // Stop the timer (increment this.time by the time that's elapsed)
@@ -115,9 +144,7 @@ function Timer(timerSerializer) {
         // Save the time to storage.
         this.timerSerializer.writeTime(this);
         this.running = false;
-        chrome.runtime.sendMessage({
-            'msg': 'Timer.stateChange'
-        });
+        TimerEvent.dispatchInactive();
     }
 
     this.reset = function() {

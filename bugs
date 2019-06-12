@@ -1,7 +1,7 @@
 ./PageClock.js: Unset debug | id:0081c5fff0e4e01435abd122c97676d349022584
+./PageClock.js: Stop the timer if the system becomes locked. | id:437854fdc1805880b91cb914c355344428d935ae
 ./designdoc.tex: Remove minted from this repository. | id:45f0642db20e99c6a258f4f2f4bf5f19fc66a69a
 ./PageClock.js: Pack this extension | id:570af7e55ac0935cc56922feee04b7ed06f4182a
-./popup.js: Show badge when timer is running. | id:831696465e468f81f74d0d7e7cce9ed5beaeb906
 ./PageClock.js: Popup style sheet | id:d5cba0bc1819e870c7b6422f102fde1c61ed3a5c
 ./designdoc.tex: Introduction | id:d9068295ab60dd22174c76463fffbf2346ee2173
 ./PageClock.js: Stop timer when chrome is closed. | id:d9dbba1612eb354292218ca3c721354dd9dd4a8a

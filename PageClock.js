@@ -193,6 +193,8 @@ function PageClock(pageClockSerializer) {
 // Main
 ///
 
+// TODO: Stop the timer if the system becomes locked.
+
 // Called when the background script is installed. Initializes thePageClock.
 var thePageClockSerializer = new PageClockSerializer();
 var thePageClock = new PageClock(thePageClockSerializer);
@@ -205,6 +207,16 @@ chrome.runtime.onInstalled.addListener(function() {
     // Welcome message
     console.log('Installed PageClock v'
                 + chrome.runtime.getManifest().version);
+});
+
+// Display the badge when the timer is running
+document.addEventListener('Timer.stateChange', (running) => {
+    console.log('State Change! Running: ' + running.detail);
+    if (running.detail) {
+        chrome.browserAction.setBadgeText({'text': 'R'});
+    } else {
+        chrome.browserAction.setBadgeText({'text': ''});
+    }
 });
 
 // Called whenever:

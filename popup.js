@@ -10,15 +10,6 @@
 // LAST EDITED:     06/11/2019
 ////
 
-// TODO: Show badge when timer is running.
-//   The badge will look something like this, in a nice light blue:
-//     *     *
-//     * * * *
-//     *  *  *
-//     *     *
-//      *   *
-//        *
-
 function updateTime() {
     chrome.runtime.getBackgroundPage((backPage) => {
         var pageClock = backPage.thePageClock;

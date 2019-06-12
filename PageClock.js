@@ -10,8 +10,6 @@
 // LAST EDITED:     06/11/2019
 ////
 
-// TODO: Pack this extension
-
 ///////////////////////////////////////////////////////////////////////////////
 // Common Functions
 ////
@@ -84,7 +82,7 @@ function PageClockSerializer() {
 function PageClock(pageClockSerializer) {
     // Instance attributes
     this.urls = [];
-    this.debug = new Debugger(true);
+    this.debug = new Debugger(false);
 
     // Initialize the Timer
     this.timerSerializer = new TimerSerializer();
@@ -192,14 +190,10 @@ function PageClock(pageClockSerializer) {
 // Main
 ///
 
-// TODO: Stop the timer if the system becomes locked.
-
 // Called when the background script is installed. Initializes thePageClock.
 var thePageClockSerializer = new PageClockSerializer();
 var thePageClock = new PageClock(thePageClockSerializer);
 thePageClock.filteredUpdate();
-// TODO: Unset debug
-// thePageClock.setDebug(null);
 
 // Print a cute little welcome message
 chrome.runtime.onInstalled.addListener(function() {
@@ -226,9 +220,9 @@ function updatedListener(tabId, changeInfo, tab) {
 }
 
 // Set up event listeners.
-// TODO: Stop timer when chrome is closed.
 chrome.tabs.onUpdated.addListener(updatedListener);
 chrome.tabs.onActivated.addListener(updatedListener);
 chrome.windows.onFocusChanged.addListener(updatedListener);
+chrome.windows.onRemoved.addListener(updatedListener);
 
 ///////////////////////////////////////////////////////////////////////////////

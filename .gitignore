@@ -3,3 +3,5 @@ Pipfile.lock
 hash-cache/
 http/
 wheels/
+PageClock.crx
+PageClock.pem

@@ -105,7 +105,7 @@ function Timer(timerSerializer) {
     // Instance attributes
     this.running = false;
     this.startTime = null;
-    this.debug = new Debugger(true);
+    this.debug = new Debugger(false);
 
     this.timerSerializer = timerSerializer;
     this.timerSerializer.readTime(this);

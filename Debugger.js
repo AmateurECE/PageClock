@@ -7,17 +7,22 @@
 //
 // CREATED:         05/21/2019
 //
-// LAST EDITED:     05/21/2019
+// LAST EDITED:     06/22/2019
 ////
+
+'use strict';
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class: Debugger
 ////
 
-function Debugger(debugState) {
-    this.debugState = false || debugState;
-    this.debug = function(string) {
-        if (debugState) {
+export class Debugger {
+    constructor(debugState) {
+        this.debugState = (false || debugState);
+    }
+
+    debug(string) {
+        if (this.debugState) {
             console.log(string);
         }
     }

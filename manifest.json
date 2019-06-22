@@ -16,11 +16,7 @@
     },
 
     "background": {
-        "scripts": [
-            "Debugger.js",
-            "Timer.js",
-            "PageClock.js"
-        ],
+        "page": "background.html",
         "persistent": false
     },
 

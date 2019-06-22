@@ -7,8 +7,13 @@
 //
 // CREATED:         05/20/2019
 //
-// LAST EDITED:     06/11/2019
+// LAST EDITED:     06/22/2019
 ////
+
+'use strict';
+
+import { Debugger } from './Debugger.js';
+import { Timer, TimerSerializer, TimerEvent } from './Timer.js';
 
 ///////////////////////////////////////////////////////////////////////////////
 // Common Functions
@@ -40,11 +45,13 @@ function arraysEqual(a, b) {
 // Class: PageClockSerializer
 ////
 
-function PageClockSerializer() {
-    this.matchName = 'matches';
+class PageClockSerializer {
+    constructor() {
+        this.matchName = 'matches';
+    }
 
     // Read the matches from Chrome user storage.
-    this.readMatches = function(pageClock) {
+    readMatches(pageClock) {
         chrome.storage.local.get(this.matchName, (matches) => {
             var self = this;
 
@@ -63,7 +70,7 @@ function PageClockSerializer() {
     }
 
     // Write the current matches into Chrome user storage.
-    this.writeMatches = function(pageClock) {
+    writeMatches(pageClock) {
         var dict = {};
         dict[this.matchName] = pageClock.matches;
         chrome.storage.local.set(dict, () => {
@@ -79,61 +86,61 @@ function PageClockSerializer() {
 // Class: PageClock
 ///
 
-function PageClock(pageClockSerializer) {
-    // Instance attributes
-    this.urls = [];
-    this.debug = new Debugger(false);
+class PageClock {
+    constructor(pageClockSerializer) {
+        this.urls = [];
+        this.debug = new Debugger(true);
 
-    // Initialize the Timer
-    this.timerSerializer = new TimerSerializer();
-    this.timer = new Timer(this.timerSerializer);
+        // Initialize the Timer
+        this.timerSerializer = new TimerSerializer();
+        this.timer = new Timer(this.timerSerializer);
 
-
-    // Read in matches info.
-    this.pageClockSerializer = pageClockSerializer;
-    this.pageClockSerializer.readMatches(this);
+        // Read in matches info.
+        this.pageClockSerializer = pageClockSerializer;
+        this.pageClockSerializer.readMatches(this);
+    }
 
     // Getters and Setters
-    this.getUrls = function()    { return this.urls; }
-    this.setUrls = function(urls) { this.urls = urls; }
+    getUrls()    { return this.urls; }
+    setUrls(urls) { this.urls = urls; }
 
-    this.getDebug = function()      { return this.debug; }
-    this.setDebug = function(debug) {
+    getDebug()      { return this.debug; }
+    setDebug(debug) {
         this.debug = debug;
         this.timer.setDebug(debug);
     }
 
-    this.getMatches = function()        { return this.matches; }
-    this.setMatches = function(matches) {
+    getMatches()        { return this.matches; }
+    setMatches(matches) {
         this.matches = matches;
         this.filteredUpdate(forced=true);
         this.pageClockSerializer.writeMatches(this);
     }
 
-    this.getTimer = function() { return this.timer; }
+    getTimer() { return this.timer; }
 
     // Update the timer when a new page loads
-    this.update = function(urls, forced=false) {
+    update(urls, forced=false) {
         var self = this;
-        var debug = self.debug.debug;
-        debug('Urls: ' + urls);
-        debug('Self: ' + self.urls);
+        var debug = self.debug;
+        debug.debug('Urls: ' + urls);
+        debug.debug('Self: ' + self.urls);
         if (arraysEqual(urls, self.urls) && !forced) {
-            debug('Arrays are equal, no update performed.');
+            debug.debug('Arrays are equal, no update performed.');
             return;
         }
 
-        debug('Updating...');
+        debug.debug('Updating...');
         self.urls = urls;
 
         // Determine if this update matches, start the timer if it's not
         // already running.
         for (let i = 0; i < self.urls.length; i++) {
-            debug('Testing URL: ' + self.urls[i]);
+            debug.debug('Testing URL: ' + self.urls[i]);
             for (let j = 0; j < self.matches.length; j++) {
                 if (self.urls[i].indexOf(self.matches[j]) !== -1) {
                     // Found a match
-                    debug('Matches Rule: ' + self.matches[j]);
+                    debug.debug('Matches Rule: ' + self.matches[j]);
                     if (!self.timer.isRunning()) {
                         self.timer.start();
                     }
@@ -150,7 +157,7 @@ function PageClock(pageClockSerializer) {
 
     // Filter the array of Tab objects and invoke .update() to update the state
     // of the timer.
-    this.filteredUpdate = function(forced=false) {
+    filteredUpdate(forced=false) {
         chrome.tabs.query({'active': true}, (tabs) => {
             var self = this;
             var filteredUrls = [];

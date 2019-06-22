@@ -7,8 +7,12 @@
 //
 // CREATED:         05/21/2019
 //
-// LAST EDITED:     06/11/2019
+// LAST EDITED:     06/22/2019
 ////
+
+'use strict';
+
+import { Debugger } from './Debugger.js';
 
 // Return true if obj is an empty object.
 function isEmpty(obj) {
@@ -22,7 +26,7 @@ function isEmpty(obj) {
 ////
 
 
-class TimerEvent {
+export class TimerEvent {
     static dispatchInactive() {
         chrome.runtime.sendMessage({
             'msg': 'Timer.stateChange',
@@ -52,7 +56,7 @@ class TimerEvent {
 // Class: TimerSerializer
 ////
 
-function TimerSerializer() {
+export function TimerSerializer() {
     this.timeName = 'time';
     this.lastResetName = 'lastReset';
 
@@ -101,7 +105,7 @@ function TimerSerializer() {
 // Class: Timer
 ///
 
-function Timer(timerSerializer) {
+export function Timer(timerSerializer) {
     // Instance attributes
     this.running = false;
     this.startTime = null;

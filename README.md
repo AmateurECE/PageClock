@@ -7,3 +7,16 @@ the length of time spent on particular websites. For more information on
 # Compatibilities #
 
 This extension is compatible with Google Chrome version 73 and newer.
+
+# Developing #
+
+If you feel the need to help develop PageClock, be my guest! However, this
+application uses EC6 modules and classes, which means that the content needs to
+be served statically to prevent CORS errors when loaded as an unpacked
+extension. While it's obviously not the most secure method, I find using
+`serve` is sufficient for this.
+
+```
+yarn global add serve
+serve ./
+```
